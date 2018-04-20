@@ -1,0 +1,21 @@
+{
+  "name": "experiments",
+  "version": "0.1.0",
+  "description": "Just some of Eli's experiments with creative code.",
+  "author": "Eli Fitch <eli.fitch.prof@gmail.com> (http://eli.wtf)",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://github.com/elifitch/experiments#readme",
+  "private": true,
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "new-3d-experiment": "git clone git@github.com:elifitch/three-boilerplate.git && rm -rf ./three-boilerplate/.git && mv ./three-boilerplate ",
+    "start": "react-scripts start",
+    "build": "react-scripts build && bin/build.js",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
