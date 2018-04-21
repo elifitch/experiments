@@ -93,8 +93,8 @@ composer.addPass(sobelInputPass);
 const effectSobel = new THREE.ShaderPass(SobelOperatorShader);
 effectSobel.renderToScreen = true;
 // effectSobel.clear = false;
-effectSobel.uniforms.resolution.value.x = window.innerWidth;
-effectSobel.uniforms.resolution.value.y = window.innerHeight;
+effectSobel.uniforms.resolution.value.x = window.innerWidth / 1.5;
+effectSobel.uniforms.resolution.value.y = window.innerHeight / 1.5;
 composer.addPass(effectSobel);
 
 
