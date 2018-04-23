@@ -57,4 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# built files
+dist/
+
+# Damn you steve jobs
 .DS_Store
