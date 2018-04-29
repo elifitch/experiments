@@ -13,7 +13,7 @@ let cW = containerEl.offsetWidth;
 let cH = containerEl.offsetHeight;
 
 const renderer = Renderer({containerEl, clearColor: 0xFF00FF});
-const { scene, camera } = Scene({
+const { innerScene, outlineScene, camera } = Scene({
   cameraPos: [0, 0, 3],
   cameraAspect: cW / cH,
   cameraFov: 45
@@ -25,10 +25,20 @@ controls.rotateSpeed = 0.5;
 controls.dampingFactor = 0.25;
 controls.enableKeys = true;
 
-ImportModel().then(({ meshGroup, goldTooth }) => {
-  scene.add(meshGroup);
+ImportModel().then(({ normalSkull, outlineSkull }) => {
+  innerScene.add(normalSkull);
+  outlineScene.add(outlineSkull);
+  const { composer } = Composer({
+    renderer,
+    camera,
+    width: cW * window.devicePixelRatio,
+    height: cH * window.devicePixelRatio,
+    innerScene,
+    outlineScene
+  });
 
-  RenderLoop({ renderer, camera, scene, controls });
+  // RenderLoop({ renderer: renderer, controls, camera, scene: outlineScene });
+  RenderLoop({ renderer: composer, controls, camera, scene: outlineScene });
 });
 
 window.addEventListener('resize', () => {

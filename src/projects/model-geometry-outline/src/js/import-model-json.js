@@ -51,57 +51,14 @@ function ImportModel() {
     const onLoaderProgress = prog => console.log('proggy: ', prog);
     const onLoaderError = err => console.log(err);
     const onObjLoad = (geometry, material) => {
-      // const meshGroup = loaderEvent.detail.loaderRootNode;
-      const meshGroup = new THREE.Object3D;
-      // const normalSkull = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial());
-      const normalSkull = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xFFFFFF }));
-      meshGroup.add(normalSkull)
+      const normalSkull = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0x000000 }));
 
       const outlineSkullGeo = geometry.clone();
-      THREEx.dilateGeometry(outlineSkullGeo, 0.01);
-      const outlineSkull = new THREE.Mesh(outlineSkullGeo, new THREE.MeshBasicMaterial({ color: 0xFF0000, side: THREE.BackSide }));
-      meshGroup.add(outlineSkull);
+      outlineSkullGeo.computeVertexNormals();
+      THREEx.dilateGeometry(outlineSkullGeo, 0.02);
+      const outlineSkull = new THREE.Mesh(outlineSkullGeo, new THREE.MeshNormalMaterial({ color: 0xFF0000, flatShading: false }));
 
-      // ////////////////////
-      // const offset = 0.02;
-      // const flipped = meshGroup.clone();
-      // console.log(flipped)
-      // // const flipped = meshGroup.children[meshGroup.children.length - 2];
-      // flipped.material = new THREE.MeshBasicMaterial({ color: 0xFF00FF, side: THREE.BackSide });
-
-      // // const geo = new THREE.Geometry().fromBufferGeometry(flipped.geometry);
-      // const geo = flipped.geometry;
-      // geo.computeFaceNormals();
-      // geo.mergeVertices();
-      // // geo.computeVertexNormals();
-      // geo.computeVertexNormals();
-      // flipped.geometry = new THREE.BufferGeometry().fromGeometry(geo);
-
-      // const flippedVerts = flipped.geometry.attributes.position.array;
-      // const flippedNormals = flipped.geometry.attributes.normal.array;
-      // console.log(flippedVerts)
-      // for (let i = 0; i < flippedVerts.length; i += 3) {
-      //   const x = flippedVerts[i];
-      //   const y = flippedVerts[i + 1];
-      //   const z = flippedVerts[i + 2];
-      //   const normalX = flippedNormals[i];
-      //   const normalY = flippedNormals[i + 1];
-      //   const normalZ = flippedNormals[i + 2];
-
-      //   flippedVerts[i] = x + (normalX * offset)
-      //   flippedVerts[i + 1] = y + (normalY * offset)
-      //   flippedVerts[i + 2] = z + (normalY * offset)
-        
-      //   flippedNormals[i] = normalX * -1;
-      //   flippedNormals[i + 1] = normalY * -1;
-      //   flippedNormals[i + 2] = normalY * -1;
-      // }
-      // flippedVerts.needsUpdate = true;
-      // console.log(flipped)
-      // meshGroup.add(flipped)
-      // ///////////////////
-
-      resolve({ meshGroup });
+      resolve({ normalSkull, outlineSkull });
     };
     const loadObj = () => objLoader.load(skullJson, onObjLoad, onLoaderProgress, onLoaderError);
     loadObj();

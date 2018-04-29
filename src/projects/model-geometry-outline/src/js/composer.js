@@ -8,43 +8,33 @@ import 'three/postprocessing/MaskPass';
 import 'three/postprocessing/ClearPass';
 import SobelOperatorShader from './custom-sobel';
 
-function Composer({ renderer, camera, width, height, outlineScene, colorScene }) {
+function Composer({ renderer, camera, width, height, outlineScene, innerScene }) {
   const rtParams = {
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
     format: THREE.RGBFormat,
     stencilBuffer: true, // THIS is also important!
   }
-
+  
   const renderTarget = new THREE.WebGLRenderTarget(width, height, rtParams)
   const composer = new THREE.EffectComposer(renderer, renderTarget);
 
-  const clearPass = new THREE.ClearPass()
+  const innerPass = new THREE.RenderPass(innerScene, camera);
+  const outlinePass = new THREE.RenderPass(outlineScene, camera);
+  outlinePass.clear = false;
 
-  const maskColorScene = new THREE.MaskPass(colorScene, camera);
-  maskColorScene.inverse = true;
+  const maskPass = new THREE.MaskPass(innerScene, camera);
+  maskPass.inverse = true;
+  const clearMask = new THREE.ClearMaskPass();
+  
+  const copyPass = new THREE.ShaderPass(THREE.CopyShader);
+  copyPass.renderToScreen = true;
 
-  const clearMaskPass = new THREE.ClearMaskPass();
-
-  const sobelInputPass = new THREE.RenderPass(outlineScene, camera);
-
-  const colorSceneRenderPass = new THREE.RenderPass(colorScene, camera);
-  colorSceneRenderPass.clear = false; // THIS IS IMPORTANT
-
-  const effectSobel = new THREE.ShaderPass(SobelOperatorShader);
-  effectSobel.uniforms.resolution.value.x = width;
-  effectSobel.uniforms.resolution.value.y = height;
-
-  const outputPass = new THREE.ShaderPass(THREE.CopyShader)
-  outputPass.renderToScreen = true
-
-  composer.addPass(clearPass);
-  composer.addPass(sobelInputPass);
-  composer.addPass(colorSceneRenderPass);
-  composer.addPass(maskColorScene);
-  composer.addPass(effectSobel);
-  composer.addPass(clearMaskPass);
-  composer.addPass(outputPass);
+  composer.addPass(innerPass);
+  composer.addPass(maskPass);
+  composer.addPass(outlinePass);
+  composer.addPass(clearMask);
+  composer.addPass(copyPass);
 
   return { composer, renderTarget }
 }

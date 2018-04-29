@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 
 function Scene({cameraPos, cameraFov, cameraAspect}) {
-  const scene = new THREE.Scene();
+  const innerScene = new THREE.Scene();
+  const outlineScene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera( cameraFov, cameraAspect, 0.1, 10000 );
 	camera.position.set(...cameraPos);
-  camera.lookAt(scene.position);
+  camera.lookAt(innerScene.position);
   
   // just to get some insanely basic lighting
   const pl1 = new THREE.PointLight({ color: '#FFFFFF' });
@@ -16,13 +17,13 @@ function Scene({cameraPos, cameraFov, cameraAspect}) {
   pl2.position.set(100, 0, 0)
   pl3.position.set(-100, 0, 0)
 
-  scene.add(pl1);
-  scene.add(pl2);
-  scene.add(pl3);
+  innerScene.add(pl1);
+  innerScene.add(pl2);
+  innerScene.add(pl3);
 
   // scene.add(camera);
 
-  return { scene, camera };
+  return { innerScene, outlineScene, camera };
 }
 
 export default Scene;

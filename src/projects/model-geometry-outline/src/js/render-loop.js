@@ -5,6 +5,7 @@ function RenderLoop({renderer, scene, camera, controls}) {
   window.requestAnimationFrame(() => RenderLoop({renderer, scene, camera, controls}));
 
   renderer.render(scene, camera);
+  // renderer.render();
 }
 
 export default RenderLoop;
