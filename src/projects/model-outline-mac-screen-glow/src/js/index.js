@@ -13,7 +13,7 @@ let cW = containerEl.offsetWidth;
 let cH = containerEl.offsetHeight;
 
 const renderer = Renderer({containerEl, clearColor: 0xFF00FF});
-const { outlineScene, colorScene, camera } = Scene({
+const { outlineScene, colorScene, maskScene, camera } = Scene({
   cameraPos: [0, 0, 25],
   cameraAspect: cW / cH,
   cameraFov: 45
@@ -26,20 +26,22 @@ controls.dampingFactor = 0.25;
 controls.enableKeys = true;
 // controls.autoRotate = true;
 
-ImportModel().then(({ meshGroup, colorModel }) => {
+ImportModel().then(({ meshGroup, colorModel, maskOutlineMesh }) => {
   outlineScene.add(meshGroup);
   colorScene.add(colorModel);
+  maskScene.add(maskOutlineMesh);
 
-  const { composer } = Composer({
+  const { composer, composer2, bloomPass } = Composer({
     renderer,
     camera,
     width: cW * window.devicePixelRatio,
     height: cH * window.devicePixelRatio,
     outlineScene,
-    colorScene
+    colorScene,
+    maskScene
   });
 
-  RenderLoop({ renderer: composer, controls });
+  RenderLoop({ renderer, composer, composer2, bloomPass, camera, controls });
 });
 
 window.addEventListener('resize', () => {

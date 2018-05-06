@@ -3,6 +3,7 @@ import * as THREE from 'three';
 function Scene({cameraPos, cameraFov, cameraAspect}) {
   const outlineScene = new THREE.Scene();
   const colorScene = new THREE.Scene();
+  const maskScene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera( cameraFov, cameraAspect, 0.1, 10000 );
 	camera.position.set(...cameraPos);
   camera.lookAt(outlineScene.position);
@@ -23,7 +24,7 @@ function Scene({cameraPos, cameraFov, cameraAspect}) {
 
   // scene.add(camera);
 
-  return { outlineScene, colorScene, camera };
+  return { outlineScene, colorScene, maskScene, camera };
 }
 
 export default Scene;

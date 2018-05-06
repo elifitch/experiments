@@ -25,7 +25,6 @@ function ImportModel() {
     const onObjLoad = loaderEvent => {
       const meshGroup = loaderEvent.detail.loaderRootNode;
       const uniqueColors = uniqueGrayscales(meshGroup.children.length);
-      console.log(meshGroup);
       
       meshGroup.children.forEach((mesh, i) => {
         const color = uniqueColors[i];
@@ -40,22 +39,15 @@ function ImportModel() {
 
       // let screen = meshGroup.children.find(getScreen).clone();
       let screen = meshGroup.getObjectByName('screen_Cube.003').clone();
-      // screen.material = new THREE.MeshStandardMaterial({
-      //   color: '#FFDB5D',
-      //   roughness: 0.62,
-      //   metalness: 1.0
-      // });
       screen.material = new THREE.MeshBasicMaterial({
         color: '#00FFFF'
       });
       screen.material.opacity = 1.0; // just used as an identifier in the sobel shader
-      // screen.material.side = THREE.DoubleSide;
 
-      meshGroup.remove(
-        meshGroup.getObjectByName('screen_Cube.003')
-      );
+      const maskOutlineMesh = meshGroup.getObjectByName('screen-bezel_Cube.004').clone();
+      maskOutlineMesh.material.side = THREE.DoubleSide;
     
-      resolve({ meshGroup: meshGroup, colorModel: screen  });
+      resolve({ meshGroup: meshGroup, colorModel: screen, maskOutlineMesh  });
     };
     const loadObj = () => objLoader.load(model, onObjLoad, onLoaderProgress, onLoaderError);
     loadObj();
