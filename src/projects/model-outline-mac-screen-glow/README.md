@@ -1,11 +1,17 @@
 # Experiment
 
-This iteration of the skull outline series finally gets a gold tooth (or any colored geometry) rendering in tandem with the sobel operator!
+![mac](mac.png)
 
-That's accomplished by zeroing out the alpha channel of anything that's supossed to retain its colors, and using that as an indicator within the sobel shader to render that fragment's existing color rather than the black/white outline.
+This experiment, I wanted to have the mac with sharp outlines, but the screen a flickering blue with bloom.
 
-This has two big benefits.
-1. You no longer see any colored geometry masked out weirdly from the back side. Outlined geometry can occlude colored geometry just fine.
-2. It only needs two passes! One to render the scene, and the other to outline it. No mask or copy passes.
+I ran into a bevvy of problems getting this done, here are some of the things I tried that **didn't** work.
 
-There's still one problem to solve, which is that colored elements still have a one pixel outline around them, while everything else still has its two pixel outline. It's unclear at this point if that's a limitation of the sobel operator or if I can hack around that problem.
+1. I tried to render the sobel effect and *then* render the screen/color pass. This failed because apparently you can't do a render pass after a shader pass. Seems crazy but I couldn't get it to work. Even render pass 1 -> copyshader pass -> render pass 2, render pass 2 wont actually render. Weird right?
+2. I tried to do a mask thing? I can't quite remember. I think there was an issue with masking because the screen is wholly inside the bounds of the mac that I want outlined, so it would get stenciled out too? Honestly I can't remember, too bad.
+
+What ended up working is a combination of more clever masking, and blending two scenes together.
+I made a separate scene for masking, that consists just of the scene bezel, that way we're masking the minimum necessary to keep the screen hidden from the top and sides, without dealing with the enormous number of weird artifacts and transparency issues from masking the whole thing. Masking the whole thing didn't work because it blocked blending, stuff like that.
+
+What I'm doing then is mask the screen with the bezel, render it, do the bloom, and save it to a texture. Then in a separate render target, render the body of the mac, run my custom sobel outliner, and then blend it with the output of the screen render texture.
+
+I had to make a custom blend shader to maintain the crisp white outlines, and only blend in stuff from the bloomed screen.

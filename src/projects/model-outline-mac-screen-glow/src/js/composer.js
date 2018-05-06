@@ -14,6 +14,7 @@ import SobelOperatorShader from './shaders/custom-sobel';
 import customVerticalBlurShader from './shaders/custom-blur-v';
 import customHorizontalBlurShader from './shaders/custom-blur-h';
 import customTriangleBlurShader from './shaders/custom-triangle-blur';
+import customBlendShader from './shaders/custom-blend';
 
 function Composer({ renderer, camera, width, height, outlineScene, colorScene, maskScene }) {
   const rtParams = {
@@ -78,7 +79,8 @@ function Composer({ renderer, camera, width, height, outlineScene, colorScene, m
 
   const savePass = new THREE.SavePass(new THREE.WebGLRenderTarget(width, height, rtParams));
 
-  const blendWithScreen = new THREE.ShaderPass(THREE.BlendShader, 'tDiffuse1');
+  // const blendWithScreen = new THREE.ShaderPass(THREE.BlendShader, 'tDiffuse1');
+  const blendWithScreen = new THREE.ShaderPass(customBlendShader, 'tDiffuse1');
   blendWithScreen.uniforms['tDiffuse2'].value = savePass.renderTarget.texture;
   blendWithScreen.uniforms['mixRatio'].value = 0.5;
 
@@ -108,12 +110,11 @@ function Composer({ renderer, camera, width, height, outlineScene, colorScene, m
 
   // compose screen scene
   composerScreen.addPass(clearPass);
+  // Without this mask you can see the screen through the outlined mac
   composerScreen.addPass(maskOutlineScene);
-  // composerScreen.addPass(renderMaskSceneForDebug);
   composerScreen.addPass(colorPass);
   composerScreen.addPass(bloomPass);
   composerScreen.addPass(savePass);
-  // composerScreen.addPass(outputPass);
 
   // compose outline scene
   composer.addPass(clearPass);
@@ -121,7 +122,6 @@ function Composer({ renderer, camera, width, height, outlineScene, colorScene, m
   composer.addPass(effectSobel);
   composer.addPass(blendWithScreen);
   composer.addPass(outputPass);
-  console.log(composer)
 
   return { composer, composer2: composerScreen, bloomPass }
 }

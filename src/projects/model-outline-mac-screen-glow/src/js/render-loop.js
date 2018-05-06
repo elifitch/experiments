@@ -22,7 +22,7 @@ function RenderLoop({ renderer, composer, composer2, bloomPass, scene, camera, c
   controls.update();
   window.requestAnimationFrame(() => RenderLoop({ renderer, composer, composer2, bloomPass, scene, camera, controls }));
 
-  bloomPass.copyUniforms.opacity.value = getRandomFloat(0.7, 1.3) * 3.0;
+  bloomPass.copyUniforms.opacity.value = getRandomFloat(0.8, 1.2) * 3.0;
   composer2.render();
   composer.render();
 }
