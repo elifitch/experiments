@@ -27,6 +27,7 @@ function ImportModel() {
 
       const leaves = meshGroup.getObjectByName('leaf_Plane').clone();
       leaves.material = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
+      leaves.material.opacity = 0;
       meshGroup.remove(
         meshGroup.getObjectByName('leaf_Plane')
       );
@@ -35,8 +36,9 @@ function ImportModel() {
       meshGroup.children.forEach((child, i) => {
         child.material = new THREE.MeshBasicMaterial({ color: uniqueColors[i] });
       });
+      meshGroup.add(leaves);
     
-      resolve({ meshGroup: meshGroup, colorModel: leaves  });
+      resolve({ meshGroup: meshGroup  });
     };
     const loadObj = () => objLoader.load(model, onObjLoad, onLoaderProgress, onLoaderError);
     loadObj();

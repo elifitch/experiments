@@ -27,6 +27,7 @@
     "webpack-dev-server": "^2.9.5"
   },
   "dependencies": {
+    "gif.js": "^0.2.0",
     "gsap": "^1.20.3",
     "three": "^0.88.0"
   }

@@ -52,10 +52,12 @@ void main() {
   float G = sqrt( pow(valueGx, 6.0) + pow(valueGy, 6.0) );
   
   if( G > 0.0 ) result = vec3(1);
+  if( middleTexel.a == 0.0 ) result = vec3(middleTexel);
   // if( middleTexel.r != middleTexel.g ) result = vec3( 0 );
-  if (middleTexel == targetColor) result = vec3(middleTexel);
-  if (middleTexel.r == 1.0 && middleTexel.g == 1.0 && middleTexel.b == 1.0) result = vec3(0);
+  // if (middleTexel == targetColor) result = vec3(middleTexel);
+  // if (middleTexel.r == 1.0 && middleTexel.g == 1.0 && middleTexel.b == 1.0) result = vec3(0);
   
   gl_FragColor = vec4( result, 1 );
+  // gl_FragColor = vec4( 1.0 );
 
 }

@@ -24,24 +24,25 @@ controls.enableDamping = true;
 controls.rotateSpeed = 0.5;
 controls.dampingFactor = 0.25;
 controls.enableKeys = true;
-// controls.autoRotate = true;
 
-ImportModel().then(({ meshGroup, colorModel, maskOutlineMesh }) => {
+ImportModel().then(({ meshGroup, colorModel }) => {
   outlineScene.add(meshGroup);
-  colorScene.add(colorModel);
-  maskScene.add(colorModel);
 
   const { composer, composer2, bloomPass } = Composer({
     renderer,
     camera,
     width: cW * window.devicePixelRatio,
     height: cH * window.devicePixelRatio,
-    outlineScene,
-    colorScene,
-    maskScene
+    outlineScene
   });
-
-  RenderLoop({ renderer, composer, composer2, bloomPass, camera, controls });
+  const ctx = renderer.getContext();
+  const pixels = new Uint8Array(ctx.drawingBufferWidth * ctx.drawingBufferHeight * 4)
+  ctx.getImageData = (a, b, c, d) => {
+    return {
+      data: ctx.readPixels(a, b, c, d, ctx.RGBA, ctx.UNSIGNED_BYTE, pixels)
+    }
+  };
+  RenderLoop({ renderer, ctx, composer, composer2, bloomPass, camera, controls, rotateMesh: meshGroup });
 });
 
 window.addEventListener('resize', () => {

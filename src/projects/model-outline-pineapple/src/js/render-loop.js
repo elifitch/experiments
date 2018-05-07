@@ -1,30 +1,41 @@
-function getRandomFloat(min, max) {
-  return Math.random() * (max - min) + min;
-}
+// import GifJS from 'gif.js';
+// import GifWorker from 'gif.js/dist/gif.worker.js';
 
-// function RenderLoop({renderer, scene, camera, controls}) {
-//   controls.update();
-//   window.requestAnimationFrame(() => RenderLoop({renderer, scene, camera, controls}));
+// const gif = new GifJS({
+//   workers: 2,
+//   quality: 10,
+//   workerScript: GifWorker,
+//   width: 1000,
+//   height: 1000
+// });
+const duration = 2;
+let tick = 0;
 
-//   renderer.render();
+// function RenderOnControlChange({ renderer, composer, composer2, bloomPass, scene, camera, controls }) {
+//   const render = () => {
+//     composer.render();
+//   };
+//   render();
+//   controls.addEventListener('change', render);
 // }
-function RenderOnControlChange({ renderer, composer, composer2, bloomPass, scene, camera, controls }) {
-  const render = () => {
-    bloomPass.copyUniforms.opacity.value = getRandomFloat(0.9, 1.1) * 4.0;
-    composer2.render();
-    composer.render();
-  };
-  render();
-  controls.addEventListener('change', render);
-}
 
-function RenderLoop({ renderer, composer, composer2, bloomPass, scene, camera, controls }) {
+function RenderLoop({ renderer, ctx, composer, scene, camera, controls, rotateMesh }) {
+  tick++;
+
   controls.update();
-  window.requestAnimationFrame(() => RenderLoop({ renderer, composer, composer2, bloomPass, scene, camera, controls }));
+  window.requestAnimationFrame(() => RenderLoop({ renderer, ctx, composer, scene, camera, controls, rotateMesh }));
 
-  bloomPass.copyUniforms.opacity.value = getRandomFloat(0.8, 1.2) * 3.0;
-  composer2.render();
+  rotateMesh.rotation.y += ((Math.PI * 2) / (60 * duration));
+
   composer.render();
+  // gif.addFrame(ctx, { copy: true });
+  // // Finish gif
+  // if(tick === duration * 60) {
+  //   gif.on('finished', function (blob) {
+  //     window.open(URL.createObjectURL(blob));
+  //   });
+  //   gif.render();
+  // }
 }
 
 // export default RenderOnControlChange;
