@@ -5,7 +5,7 @@ import 'three/MTLLoader';
 import sceneObj from '../models/eli-wtf-models.obj';
 import donutTexture from '../models/icing-base-color.png';
 
-const generateBasicMat = (color) => new THREE.MeshBasicMaterial({ color })
+const generateBasicMat = (color) => new THREE.MeshBasicMaterial({ color });
 const donutMat = generateBasicMat('#E7CCAA');
 const pinkMat = generateBasicMat('#FF5399');
 const darkPinkMat = generateBasicMat('#E03F81');
@@ -25,12 +25,6 @@ function ImportModel() {
   return new Promise(resolve => {
     const onLoaderProgress = prog => console.log('proggy: ', prog);
     const onLoaderError = err => console.error(err);
-    const onLoadMtl = materials => {
-      // these materials will be overridden by a shader example
-      objLoader.setMaterials(materials);
-      objLoader.setUseIndices(true);
-      loadObj();
-    };
     const onObjLoad = loaderEvent => {
       const meshGroup = loaderEvent.detail.loaderRootNode;
 
@@ -86,7 +80,7 @@ function ImportModel() {
       macContainer.add(screen);
 
       const donutContainer = new THREE.Object3D();
-      donutContainer.add(donut)
+      donutContainer.add(donut);
       donutContainer.add(icing);
 
       const skullContainer = new THREE.Object3D();
@@ -97,14 +91,14 @@ function ImportModel() {
       skullContainer.add(teeth);
 
       const groupContainer = new THREE.Object3D();
-      groupContainer.add(macContainer)
-      groupContainer.add(donutContainer)
-      groupContainer.add(skullContainer)
+      groupContainer.add(macContainer);
+      groupContainer.add(donutContainer);
+      groupContainer.add(skullContainer);
 
       resolve(groupContainer);
     };
     const loadObj = () => objLoader.load(sceneObj, onObjLoad, onLoaderProgress, onLoaderError);
-  
+
     loadObj();
   });
 }
