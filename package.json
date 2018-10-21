@@ -1,0 +1,22 @@
+{
+  "name": "experiments",
+  "version": "0.0.1",
+  "description": "Eli Fitch's creative code experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elifitch/experiments.git"
+  },
+  "author": "Eli Fitch (http://eli.wtf/)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/elifitch/experiments/issues"
+  },
+  "homepage": "https://github.com/elifitch/experiments#readme",
+  "devDependencies": {
+    "nunjucks": "^3.1.3"
+  }
+}
