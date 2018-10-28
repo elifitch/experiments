@@ -6,9 +6,10 @@ import Scene from './scene';
 import RenderLoop from './render-loop';
 import ImportModel from './import-model';
 import 'three/OrbitControls';
-import distributePattern from './distribute-pattern';
+import generatePattern from './generate-pattern';
+import animatePattern from './animate-pattern';
 
-const PATTERN_SCALE = 500;
+const PATTERN_SCALE = 200;
 const TEXTURE_RESOLUTION = 1024;
 
 const containerEl = document.getElementsByClassName('container')[0];
@@ -17,7 +18,9 @@ let cH = containerEl.offsetHeight;
 const initialWidth = containerEl.offsetWidth;
 const initialHeight = containerEl.offsetHeight;
 
+// Model defs
 let bgPlane;
+let pattern;
 
 // TODO: need to figure a way to dynamically set the texture size
 // based on the window size
@@ -61,7 +64,8 @@ controls.enableZoom = false;
 controls.target = new THREE.Vector3(0, verticalOffset, 0);
 
 ImportModel().then(meshGroup => {
-  rttScene.add(distributePattern(meshGroup));
+  pattern = generatePattern(meshGroup);
+  rttScene.add(pattern);
 
   // ----------------------------
   bgPlane = new THREE.Mesh(
@@ -87,6 +91,20 @@ window.addEventListener('resize', () => {
   displayCamera.top = cH / 2;
   displayCamera.bottom = cH / -2;
   displayCamera.updateProjectionMatrix();
+});
+
+window.addEventListener('mousemove', (e) => {
+  animatePattern({
+    pattern,
+    mouseCoords: {
+      x: e.clientX,
+      y: e.clientY
+    },
+    dimensions: {
+      w: cW,
+      h: cH
+    }
+  });
 });
 
 RenderLoop({ renderer, rtTexture, scenes: [rttScene, displayScene], cameras: [rttCamera, displayCamera], controls });

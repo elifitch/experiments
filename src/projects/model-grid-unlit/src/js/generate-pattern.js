@@ -6,7 +6,7 @@ const getSkull = (grp) => grp.children[2];
 
 const offset = 2.1;
 
-function distributePattern(meshGroup) {
+function generatePattern(meshGroup) {
   const middle = meshGroup;
   const middleMac = getMac(middle);
   const middleDonut = getDonut(middle);
@@ -43,4 +43,4 @@ function distributePattern(meshGroup) {
   return result;
 }
 
-export default distributePattern;
+export default generatePattern;
