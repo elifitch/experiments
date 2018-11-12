@@ -24,6 +24,8 @@ const yellowMat = makeMat('#FFE275');
 const cakeMaterial = makeMat('#E8CDAA');
 const icingMaterial = makeMat('#FE56FA');
 
+const SPRINKLE_OFFSET = 0.006;
+
 const sprinkleMaterials = [whiteMat, blueMat, redMat, yellowMat];
 const getRandomSprinkleMaterial = () => {
   const getRandomInt = (min, max) => {
@@ -60,14 +62,15 @@ function ImportModel(scene) {
         sprinkleClone.rotation.z = Math.PI * Math.random();
 
         sprinkleClone.position.set(position.x, position.y, position.z);
+        sprinkleClone.translateZ(SPRINKLE_OFFSET);
 
         sprinkleClone.scale.set(1, getRandomArbitrary(0.5, 0.8), 1);
 
         icing.add(sprinkleClone);
       });
-      
+
       // remove original sprinkle
-      meshGroup.remove(sprinkle)
+      meshGroup.remove(sprinkle);
       resolve(meshGroup);
     };
 
